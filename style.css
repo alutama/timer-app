@@ -101,6 +101,8 @@ main {
 #dots {
   display: flex;
   gap: 12px;
+  margin-top: 30px;
+  margin-bottom: 40px;
 }
 
 .dot {
