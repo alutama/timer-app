@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>HIIT Timer</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <div id="app" class="screen-ready">
+    <header>
+      <div id="round-indicator">ROUND 1/4</div>
+      <div id="status-text">READY</div>
+    </header>
+
+    <main>
+      <div id="timer-display">40</div>
+      <div id="label">EXERCISE</div>
+
+      <div class="progress-container">
+        <div id="progress-bar"></div>
+      </div>
+
+      <div id="dots">
+        <span class="dot active"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </div>
+    </main>
+
+    <footer>
+      <div class="controls">
+        <button id="start-btn">START WORKOUT</button>
+        <button id="reset-btn" class="hidden">RESET</button>
+        <button id="mute-btn" class="secondary-btn">🔊 SOUND ON</button>
+      </div>
+    </footer>
+  </div>
+  <script src="app.js"></script>
+</body>
+
+</html>
