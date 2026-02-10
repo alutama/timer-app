@@ -11,6 +11,7 @@ let timeLeft = CONFIG.exerciseTime;
 let timerId = null;
 let audioCtx = null;
 let isMuted = false;
+let wakeLock = null;
 
 const elements = {
   app: document.getElementById('app'),
@@ -119,16 +120,34 @@ function tick() {
   }
 }
 
-elements.startBtn.addEventListener('click', () => {
+elements.startBtn.addEventListener('click', async () => {
   initAudio();
   elements.startBtn.classList.add('hidden');
   elements.resetBtn.classList.remove('hidden');
   switchState('EXERCISE');
   timerId = setInterval(tick, 1000);
+
+  // Request wake lock
+  try {
+    if ('wakeLock' in navigator) {
+      wakeLock = await navigator.wakeLock.request('screen');
+      console.log('Wake Lock is active');
+    }
+  } catch (err) {
+    console.error(`${err.name}, ${err.message}`);
+  }
 });
 
 elements.resetBtn.addEventListener('click', () => {
   clearInterval(timerId);
+
+  // Release wake lock
+  if (wakeLock !== null) {
+    wakeLock.release().then(() => {
+      wakeLock = null;
+    });
+  }
+
   currentRound = 1;
   timeLeft = CONFIG.exerciseTime;
   currentState = 'READY';
@@ -144,4 +163,11 @@ elements.resetBtn.addEventListener('click', () => {
 elements.muteBtn.addEventListener('click', () => {
   isMuted = !isMuted;
   elements.muteBtn.textContent = isMuted ? '🔇 SOUND OFF' : '🔊 SOUND ON';
+});
+
+// Re-acquire wake lock when page becomes visible
+document.addEventListener('visibilitychange', async () => {
+  if (wakeLock !== null && document.visibilityState === 'visible') {
+    wakeLock = await navigator.wakeLock.request('screen');
+  }
 });
