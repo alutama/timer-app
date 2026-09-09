@@ -26,7 +26,24 @@
 
     <div class="timer-section">
       <div id="status-text">READY</div>
-      <div id="timer-display">40</div>
+      <div id="timer-display" class="odometer-counter">
+        <div class="odometer-drum" id="drum-tens">
+          <div class="drum-cylinder">
+            <span class="drum-digit current">4</span>
+            <span class="drum-digit next"></span>
+          </div>
+          <div class="drum-shade"></div>
+        </div>
+        <div class="drum-divider"></div>
+        <div class="odometer-drum" id="drum-ones">
+          <div class="drum-cylinder">
+            <span class="drum-digit current">0</span>
+            <span class="drum-digit next"></span>
+          </div>
+          <div class="drum-shade"></div>
+        </div>
+        <div id="timer-emoji" class="drum-emoji hidden">🎉</div>
+      </div>
       <div id="label">EXERCISE</div>
       <div class="progress-container">
         <div id="progress-bar"></div>

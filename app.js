@@ -16,6 +16,10 @@ let wakeLock = null;
 const elements = {
   app: document.getElementById('app'),
   timer: document.getElementById('timer-display'),
+  drumTens: document.getElementById('drum-tens'),
+  drumOnes: document.getElementById('drum-ones'),
+  timerEmoji: document.getElementById('timer-emoji'),
+  drumDivider: document.querySelector('.drum-divider'),
   label: document.getElementById('label'),
   round: document.getElementById('round-indicator'),
   status: document.getElementById('status-text'),
@@ -25,6 +29,56 @@ const elements = {
   resetBtn: document.getElementById('reset-btn'),
   dots: document.querySelectorAll('.dot')
 };
+
+function rollDrum(drumEl, nextChar, animated = true) {
+  if (!drumEl) return;
+  const currentEl = drumEl.querySelector('.drum-digit.current');
+  const nextEl = drumEl.querySelector('.drum-digit.next');
+  if (!currentEl || !nextEl) return;
+
+  if (currentEl.textContent === nextChar) {
+    return;
+  }
+
+  if (!animated) {
+    currentEl.textContent = nextChar;
+    drumEl.classList.remove('rolling-down');
+    return;
+  }
+
+  if (drumEl.classList.contains('rolling-down')) {
+    currentEl.textContent = nextEl.textContent;
+    drumEl.classList.remove('rolling-down');
+    void drumEl.offsetWidth;
+  }
+
+  nextEl.textContent = nextChar;
+  drumEl.classList.add('rolling-down');
+
+  setTimeout(() => {
+    currentEl.textContent = nextChar;
+    drumEl.classList.remove('rolling-down');
+  }, 280);
+}
+
+function setTimerDisplay(value, animated = true) {
+  if (value === '🎉') {
+    if (elements.drumTens) elements.drumTens.classList.add('hidden');
+    if (elements.drumOnes) elements.drumOnes.classList.add('hidden');
+    if (elements.drumDivider) elements.drumDivider.classList.add('hidden');
+    if (elements.timerEmoji) elements.timerEmoji.classList.remove('hidden');
+    return;
+  }
+
+  if (elements.drumTens) elements.drumTens.classList.remove('hidden');
+  if (elements.drumOnes) elements.drumOnes.classList.remove('hidden');
+  if (elements.drumDivider) elements.drumDivider.classList.remove('hidden');
+  if (elements.timerEmoji) elements.timerEmoji.classList.add('hidden');
+
+  const str = String(Math.max(0, value)).padStart(2, '0');
+  rollDrum(elements.drumTens, str[0], animated);
+  rollDrum(elements.drumOnes, str[1], animated);
+}
 
 // Initialize Audio Context on user interaction
 function initAudio() {
@@ -52,7 +106,7 @@ function beep(freq = 440, duration = 0.1) {
 }
 
 function updateUI() {
-  elements.timer.textContent = timeLeft;
+  setTimerDisplay(timeLeft, true);
   elements.round.textContent = `ROUND ${currentRound}/${CONFIG.rounds}`;
 
   const total = currentState === 'EXERCISE' ? CONFIG.exerciseTime : CONFIG.restTime;
@@ -95,7 +149,7 @@ function switchState(newState) {
     releaseWakeLock();
     elements.label.textContent = 'DONE!';
     elements.status.textContent = 'WORKOUT FINISHED';
-    elements.timer.textContent = '🎉';
+    setTimerDisplay('🎉', false);
     elements.timer.classList.remove('beeping');
     elements.startBtn.classList.add('hidden');
     elements.pauseBtn.classList.add('hidden');
@@ -210,7 +264,7 @@ elements.resetBtn.addEventListener('click', () => {
   elements.app.className = 'screen-ready';
   elements.status.textContent = 'READY';
   elements.label.textContent = 'EXERCISE';
-  elements.timer.textContent = timeLeft;
+  setTimerDisplay(timeLeft, false);
   elements.timer.classList.remove('beeping');
   elements.startBtn.classList.remove('hidden');
   elements.pauseBtn.classList.add('hidden');
@@ -226,3 +280,6 @@ document.addEventListener('visibilitychange', async () => {
     requestWakeLock();
   }
 });
+
+// Initialize display at startup
+setTimerDisplay(timeLeft, false);
