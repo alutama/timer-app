@@ -10,7 +10,6 @@ let currentRound = 1;
 let timeLeft = CONFIG.exerciseTime;
 let timerId = null;
 let audioCtx = null;
-let isMuted = false;
 let isPaused = false;
 let wakeLock = null;
 
@@ -24,7 +23,6 @@ const elements = {
   startBtn: document.getElementById('start-btn'),
   pauseBtn: document.getElementById('pause-btn'),
   resetBtn: document.getElementById('reset-btn'),
-  muteBtn: document.getElementById('mute-btn'),
   dots: document.querySelectorAll('.dot')
 };
 
@@ -36,7 +34,7 @@ function initAudio() {
 }
 
 function beep(freq = 440, duration = 0.1) {
-  if (!audioCtx || isMuted) return;
+  if (!audioCtx) return;
   const osc = audioCtx.createOscillator();
   const gain = audioCtx.createGain();
 
@@ -220,11 +218,6 @@ elements.resetBtn.addEventListener('click', () => {
   elements.pauseBtn.classList.remove('resuming');
   elements.resetBtn.classList.add('hidden');
   updateUI();
-});
-
-elements.muteBtn.addEventListener('click', () => {
-  isMuted = !isMuted;
-  elements.muteBtn.textContent = isMuted ? '🔇 SOUND OFF' : '🔊 SOUND ON';
 });
 
 // Re-acquire wake lock when page becomes visible
