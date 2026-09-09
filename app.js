@@ -23,6 +23,7 @@ let wakeLock = null;
 const elements = {
   app: document.getElementById('app'),
   timer: document.getElementById('timer-display'),
+  finishScreen: document.getElementById('finish-screen'),
   drumTens: document.getElementById('drum-tens'),
   drumOnes: document.getElementById('drum-ones'),
   timerEmoji: document.getElementById('timer-emoji'),
@@ -36,6 +37,22 @@ const elements = {
   resetBtn: document.getElementById('reset-btn'),
   dots: document.querySelectorAll('.dot')
 };
+
+function playFanfare() {
+  if (!audioCtx) return;
+  const notes = [
+    { freq: 523.25, time: 0.0, dur: 0.2 },  // C5
+    { freq: 659.25, time: 0.16, dur: 0.2 }, // E5
+    { freq: 783.99, time: 0.32, dur: 0.25 }, // G5
+    { freq: 1046.50, time: 0.52, dur: 0.6 } // C6
+  ];
+
+  notes.forEach(n => {
+    setTimeout(() => {
+      beep(n.freq, n.dur);
+    }, n.time * 1000);
+  });
+}
 
 function rollDrum(drumEl, nextChar, animated = true) {
   if (!drumEl) return;
@@ -113,25 +130,33 @@ function beep(freq = 440, duration = 0.1) {
 }
 
 function updateUI() {
-  setTimerDisplay(timeLeft, true);
-  elements.round.textContent = `ROUND ${currentRound}/${CONFIG.rounds}`;
+  if (currentState !== 'COMPLETE') {
+    setTimerDisplay(timeLeft, true);
+    elements.round.textContent = `ROUND ${currentRound}/${CONFIG.rounds}`;
 
-  const total = currentState === 'EXERCISE' ? CONFIG.exerciseTime : CONFIG.restTime;
-  const percent = (timeLeft / total) * 100;
-  elements.progress.style.width = `${percent}%`;
+    const total = currentState === 'EXERCISE' ? CONFIG.exerciseTime : CONFIG.restTime;
+    const percent = (timeLeft / total) * 100;
+    elements.progress.style.width = `${percent}%`;
 
-  // Highlight dots
-  elements.dots.forEach((dot, i) => {
-    dot.classList.remove('active', 'completed');
-    if (i + 1 < currentRound) dot.classList.add('completed');
-    if (i + 1 === currentRound) dot.classList.add('active');
-  });
+    // Highlight dots
+    elements.dots.forEach((dot, i) => {
+      dot.classList.remove('active', 'completed');
+      if (i + 1 < currentRound) dot.classList.add('completed');
+      if (i + 1 === currentRound) dot.classList.add('active');
+    });
 
-  if (timeLeft <= CONFIG.beepStart && timeLeft > 0) {
-    elements.timer.classList.add('beeping');
-    beep(timeLeft === 1 ? 880 : 440);
+    if (timeLeft <= CONFIG.beepStart && timeLeft > 0) {
+      elements.timer.classList.add('beeping');
+      beep(timeLeft === 1 ? 880 : 440);
+    } else {
+      elements.timer.classList.remove('beeping');
+    }
   } else {
-    elements.timer.classList.remove('beeping');
+    elements.dots.forEach(dot => {
+      dot.classList.remove('active');
+      dot.classList.add('completed');
+    });
+    elements.round.textContent = `ROUND ${CONFIG.rounds}/${CONFIG.rounds}`;
   }
 }
 
@@ -154,16 +179,24 @@ function switchState(newState) {
     timerId = null;
     isPaused = false;
     releaseWakeLock();
-    elements.label.textContent = 'DONE!';
-    elements.status.textContent = 'WORKOUT FINISHED';
-    setTimerDisplay('🎉', false);
+
+    // Show celebratory finish screen, hide timer and active workout elements
+    if (elements.finishScreen) elements.finishScreen.classList.remove('hidden');
+    if (elements.timer) elements.timer.classList.add('hidden');
+    if (elements.label) elements.label.classList.add('hidden');
+    if (elements.status) elements.status.classList.add('hidden');
+    if (elements.progress && elements.progress.parentElement) {
+      elements.progress.parentElement.classList.add('hidden');
+    }
+
     elements.timer.classList.remove('beeping');
     elements.startBtn.classList.add('hidden');
     elements.pauseBtn.classList.add('hidden');
     elements.resetBtn.classList.remove('hidden');
-    beep(523.25, 0.5); // C5
-    setTimeout(() => beep(659.25, 0.5), 200); // E5
-    setTimeout(() => beep(783.99, 0.5), 400); // G5
+    elements.resetBtn.textContent = 'START NEW WORKOUT';
+    elements.resetBtn.classList.add('finish-cta');
+
+    playFanfare();
   }
   updateUI();
 }
@@ -265,6 +298,18 @@ elements.resetBtn.addEventListener('click', () => {
   // Release wake lock
   releaseWakeLock();
 
+  // Hide celebration screen and restore timer elements
+  if (elements.finishScreen) elements.finishScreen.classList.add('hidden');
+  if (elements.timer) elements.timer.classList.remove('hidden');
+  if (elements.label) elements.label.classList.remove('hidden');
+  if (elements.status) elements.status.classList.remove('hidden');
+  if (elements.progress && elements.progress.parentElement) {
+    elements.progress.parentElement.classList.remove('hidden');
+  }
+
+  elements.resetBtn.textContent = 'RESET';
+  elements.resetBtn.classList.remove('finish-cta');
+
   currentRound = 1;
   timeLeft = CONFIG.exerciseTime;
   currentState = 'READY';
@@ -289,4 +334,6 @@ document.addEventListener('visibilitychange', async () => {
 });
 
 // Initialize display at startup
+if (elements.finishScreen) elements.finishScreen.classList.add('hidden');
 setTimerDisplay(timeLeft, false);
+updateUI();

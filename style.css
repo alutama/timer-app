@@ -460,8 +460,200 @@ button {
   -webkit-backdrop-filter: blur(16px);
 }
 
+#reset-btn.finish-cta {
+  background: linear-gradient(135deg, #ffd60a 0%, #ff9f0a 100%);
+  color: #000000;
+  border: none;
+  box-shadow: 0 6px 25px rgba(255, 214, 10, 0.5);
+  font-weight: 900;
+  animation: ctaPulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes ctaPulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 4px 18px rgba(255, 214, 10, 0.4);
+  }
+  100% {
+    transform: scale(1.02);
+    box-shadow: 0 6px 28px rgba(255, 214, 10, 0.7);
+  }
+}
+
 .hidden {
-  display: none;
+  display: none !important;
+}
+
+/* --- Celebratory Finish Screen --- */
+.finish-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  animation: finishPopIn 0.6s cubic-bezier(0.18, 0.9, 0.32, 1.2) forwards;
+}
+
+@keyframes finishPopIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.7) translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.trophy-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+
+.trophy-halo {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 214, 10, 0.45) 0%, rgba(255, 159, 10, 0.2) 45%, transparent 70%);
+  animation: haloPulse 2s ease-in-out infinite alternate;
+  z-index: 1;
+}
+
+.trophy-icon {
+  position: relative;
+  font-size: 88px;
+  line-height: 1;
+  z-index: 2;
+  filter: drop-shadow(0 10px 25px rgba(255, 214, 10, 0.6));
+  animation: trophyFloat 2.5s ease-in-out infinite alternate;
+}
+
+@keyframes trophyFloat {
+  0% {
+    transform: translateY(0) scale(1) rotate(-1deg);
+  }
+  100% {
+    transform: translateY(-10px) scale(1.06) rotate(1deg);
+  }
+}
+
+@keyframes haloPulse {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1.3);
+    opacity: 1;
+  }
+}
+
+.finish-title {
+  font-size: 30px;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  background: linear-gradient(135deg, #ffffff 0%, #ffd60a 45%, #ff9f0a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 8px;
+  text-shadow: 0 4px 15px rgba(255, 214, 10, 0.3);
+}
+
+.finish-subtitle {
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  color: rgba(255, 255, 255, 0.75);
+  margin-bottom: 22px;
+  text-transform: uppercase;
+}
+
+.finish-badge-row {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.finish-badge {
+  background: rgba(255, 214, 10, 0.12);
+  border: 1px solid rgba(255, 214, 10, 0.35);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #ffd60a;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* --- Confetti Particles --- */
+.confetti-box {
+  position: absolute;
+  top: -40px;
+  left: -80px;
+  right: -80px;
+  bottom: -180px;
+  pointer-events: none;
+  overflow: visible;
+  z-index: 10;
+}
+
+.particle {
+  position: absolute;
+  width: 9px;
+  height: 14px;
+  border-radius: 2px;
+  opacity: 0;
+  animation: confettiFall 3.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+  will-change: transform, opacity;
+}
+
+.p1  { left: 8%;  background: #ffd60a; animation-delay: 0.1s; width: 8px; height: 12px; }
+.p2  { left: 18%; background: #ff375f; animation-delay: 0.7s; width: 11px; height: 9px; }
+.p3  { left: 28%; background: #30d158; animation-delay: 1.2s; width: 9px; height: 13px; }
+.p4  { left: 38%; background: #64d2ff; animation-delay: 0.3s; width: 10px; height: 10px; border-radius: 50%; }
+.p5  { left: 48%; background: #bf5af2; animation-delay: 0.9s; width: 12px; height: 8px; }
+.p6  { left: 58%; background: #ff9f0a; animation-delay: 1.5s; width: 9px; height: 14px; }
+.p7  { left: 68%; background: #ffd60a; animation-delay: 0.4s; width: 8px; height: 11px; }
+.p8  { left: 78%; background: #64d2ff; animation-delay: 1.8s; width: 10px; height: 13px; }
+.p9  { left: 88%; background: #ff375f; animation-delay: 1.3s; width: 12px; height: 7px; }
+.p10 { left: 95%; background: #ffd60a; animation-delay: 2.0s; width: 9px; height: 9px; border-radius: 50%; }
+.p11 { left: 14%; background: #30d158; animation-delay: 0.5s; width: 11px; height: 11px; }
+.p12 { left: 24%; background: #bf5af2; animation-delay: 2.2s; width: 8px; height: 13px; }
+.p13 { left: 34%; background: #ff9f0a; animation-delay: 1.0s; width: 10px; height: 12px; }
+.p14 { left: 44%; background: #30d158; animation-delay: 1.7s; width: 7px; height: 11px; }
+.p15 { left: 54%; background: #ff375f; animation-delay: 2.4s; width: 9px; height: 12px; }
+.p16 { left: 64%; background: #ffd60a; animation-delay: 2.7s; width: 10px; height: 14px; }
+.p17 { left: 74%; background: #64d2ff; animation-delay: 2.5s; width: 8px; height: 12px; }
+.p18 { left: 84%; background: #ff9f0a; animation-delay: 2.8s; width: 11px; height: 8px; }
+.p19 { left: 92%; background: #bf5af2; animation-delay: 2.9s; width: 9px; height: 13px; }
+.p20 { left: 50%; background: #30d158; animation-delay: 1.6s; width: 10px; height: 10px; border-radius: 50%; }
+
+@keyframes confettiFall {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, -25px, 0) rotateZ(0deg) rotateX(0deg) rotateY(0deg);
+  }
+  25% {
+    opacity: 1;
+    transform: translate3d(15px, 60px, 0) rotateZ(180deg) rotateX(120deg) rotateY(90deg);
+  }
+  50% {
+    opacity: 1;
+    transform: translate3d(-15px, 140px, 0) rotateZ(360deg) rotateX(240deg) rotateY(180deg);
+  }
+  75% {
+    opacity: 0.8;
+    transform: translate3d(20px, 220px, 0) rotateZ(540deg) rotateX(360deg) rotateY(270deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(-10px, 320px, 0) rotateZ(720deg) rotateX(480deg) rotateY(360deg);
+  }
 }
 
 /* State Variations */
@@ -489,10 +681,11 @@ button {
 }
 
 .screen-complete {
-  --aurora-1: rgba(255, 214, 10, 0.5);
-  --aurora-2: rgba(255, 59, 48, 0.4);
-  --aurora-3: rgba(175, 82, 222, 0.45);
-  --aurora-4: rgba(48, 209, 88, 0.4);
+  --aurora-1: rgba(255, 214, 10, 0.58);
+  --aurora-2: rgba(255, 55, 95, 0.48);
+  --aurora-3: rgba(191, 90, 242, 0.52);
+  --aurora-4: rgba(48, 209, 88, 0.48);
+  box-shadow: inset 0 0 120px rgba(255, 214, 10, 0.25);
 }
 
 .screen-rest #progress-bar,
