@@ -205,14 +205,14 @@ function tick() {
   timeLeft--;
   if (timeLeft < 0) {
     if (currentState === 'EXERCISE') {
-      switchState('REST');
-    } else if (currentState === 'REST') {
-      if (currentRound < CONFIG.rounds) {
-        currentRound++;
-        switchState('EXERCISE');
-      } else {
+      if (currentRound >= CONFIG.rounds) {
         switchState('COMPLETE');
+      } else {
+        switchState('REST');
       }
+    } else if (currentState === 'REST') {
+      currentRound++;
+      switchState('EXERCISE');
     }
   } else {
     updateUI();
