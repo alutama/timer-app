@@ -157,20 +157,33 @@ body {
 
 /* --- Mechanical Rolling Drum Odometer (Gas Station Counter) --- */
 .odometer-counter {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(180deg, #1c1d22 0%, #0d0e12 100%);
-  padding: 8px 14px;
-  border-radius: 20px;
-  border: 2px solid rgba(255, 255, 255, 0.14);
+  background: linear-gradient(180deg, #18191d 0%, #0a0b0d 100%);
+  padding: 5px;
+  border-radius: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.16);
   box-shadow:
-    0 16px 36px rgba(0, 0, 0, 0.75),
+    0 14px 32px rgba(0, 0, 0, 0.8),
     inset 0 1px 1px rgba(255, 255, 255, 0.25),
-    inset 0 -4px 8px rgba(0, 0, 0, 0.85);
+    inset 0 -3px 6px rgba(0, 0, 0, 0.9);
   margin-bottom: 18px;
   position: relative;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.odometer-counter::before {
+  content: '';
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  right: 5px;
+  height: 50px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.01) 80%, transparent 100%);
+  border-radius: 9px 9px 0 0;
+  pointer-events: none;
+  z-index: 5;
 }
 
 .odometer-counter.beeping {
@@ -207,14 +220,21 @@ body {
 
 .odometer-drum {
   position: relative;
-  width: 76px;
+  width: 66px;
   height: 112px;
-  background: #111215;
-  border-radius: 10px;
+  background: #0d0e11;
   overflow: hidden;
   perspective: 350px;
   -webkit-perspective: 350px;
-  box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.95);
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.95);
+}
+
+#drum-tens {
+  border-radius: 9px 0 0 9px;
+}
+
+#drum-ones {
+  border-radius: 0 9px 9px 0;
 }
 
 .drum-cylinder {
@@ -234,12 +254,13 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: 'Outfit', -apple-system, monospace;
+  font-family: 'Chivo Mono', 'DIN Alternate', 'Oswald', 'Share Tech Mono', 'DIN Condensed', -apple-system-monospaced-numbers, monospace, sans-serif;
   font-size: 88px;
   font-weight: 900;
   line-height: 1;
-  color: #f8f8f6;
-  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.6);
+  letter-spacing: -2px;
+  color: #f7f7f3;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
   font-variant-numeric: tabular-nums;
   will-change: transform, opacity;
   -webkit-backface-visibility: hidden;
@@ -274,31 +295,32 @@ body {
   pointer-events: none;
   background: linear-gradient(
     180deg,
-    rgba(0, 0, 0, 0.85) 0%,
-    rgba(0, 0, 0, 0.3) 18%,
-    rgba(0, 0, 0, 0) 38%,
-    rgba(0, 0, 0, 0) 62%,
-    rgba(0, 0, 0, 0.3) 82%,
-    rgba(0, 0, 0, 0.85) 100%
+    rgba(0, 0, 0, 0.9) 0%,
+    rgba(0, 0, 0, 0.4) 15%,
+    rgba(0, 0, 0, 0) 35%,
+    rgba(0, 0, 0, 0) 65%,
+    rgba(0, 0, 0, 0.4) 85%,
+    rgba(0, 0, 0, 0.9) 100%
   );
-  border-radius: 10px;
   box-shadow:
-    inset 0 2px 4px rgba(255, 255, 255, 0.12),
-    inset 0 -2px 4px rgba(0, 0, 0, 0.9);
+    inset 0 3px 6px rgba(0, 0, 0, 0.9),
+    inset 0 -3px 6px rgba(0, 0, 0, 0.9);
+  z-index: 3;
 }
 
 .drum-divider {
-  width: 3px;
-  height: 96px;
-  margin: 0 8px;
+  width: 2px;
+  height: 112px;
+  margin: 0;
   background: linear-gradient(
     180deg,
-    rgba(255, 255, 255, 0.05) 0%,
+    rgba(255, 255, 255, 0.08) 0%,
     rgba(255, 255, 255, 0.22) 50%,
-    rgba(0, 0, 0, 0.7) 100%
+    rgba(0, 0, 0, 0.85) 100%
   );
-  border-radius: 2px;
-  box-shadow: 1px 0 2px rgba(0, 0, 0, 0.6);
+  border-left: 1px solid rgba(0, 0, 0, 0.9);
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  z-index: 4;
 }
 
 .drum-emoji {
