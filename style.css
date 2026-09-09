@@ -157,6 +157,22 @@ button {
   opacity: 0.8;
 }
 
+#pause-btn {
+  background: #ff9f0a;
+  color: white;
+  box-shadow: 0 4px 15px rgba(255, 159, 10, 0.4);
+}
+
+#pause-btn.resuming {
+  background: #30d158;
+  box-shadow: 0 4px 15px rgba(48, 209, 88, 0.4);
+}
+
+#pause-btn:active {
+  transform: scale(0.95);
+  opacity: 0.8;
+}
+
 #reset-btn {
   background: rgba(255, 255, 255, 0.1);
   color: white;
