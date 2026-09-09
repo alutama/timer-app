@@ -1,11 +1,17 @@
 :root {
-  --bg-color: #000;
+  --bg-color: #030305;
   --primary-color: #ff3b30;
   /* Red for exercise */
   --secondary-color: #007aff;
   /* Blue for rest */
   --text-color: #ffffff;
   --accent-glow: rgba(255, 59, 48, 0.3);
+
+  /* Aurora wave palette */
+  --aurora-1: rgba(255, 59, 48, 0.22);
+  --aurora-2: rgba(90, 200, 250, 0.2);
+  --aurora-3: rgba(175, 82, 222, 0.2);
+  --aurora-4: rgba(255, 149, 0, 0.16);
 }
 
 * {
@@ -42,7 +48,85 @@ body {
   box-sizing: border-box;
   text-align: center;
   overflow: hidden;
+  background-color: var(--bg-color);
   transition: background 0.5s ease, box-shadow 0.5s ease;
+}
+
+/* --- Dynamic Aurora Wave Background --- */
+.aurora-bg {
+  position: absolute;
+  inset: -25px;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(50px);
+  -webkit-filter: blur(50px);
+  opacity: 0.95;
+  transition: opacity 0.8s ease;
+  transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
+}
+
+.aurora-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 40%, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0.65) 85%);
+  pointer-events: none;
+}
+
+.aurora-wave {
+  position: absolute;
+  border-radius: 50%;
+  mix-blend-mode: screen;
+  will-change: transform, border-radius;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  transition: background 0.8s ease;
+}
+
+.wave-1 {
+  top: -15%;
+  left: -20%;
+  width: 90vw;
+  height: 90vw;
+  min-width: 340px;
+  min-height: 340px;
+  background: radial-gradient(circle, var(--aurora-1) 0%, rgba(0, 0, 0, 0) 70%);
+  animation: waveMotion1 16s ease-in-out infinite alternate;
+}
+
+.wave-2 {
+  top: 15%;
+  right: -25%;
+  width: 95vw;
+  height: 95vw;
+  min-width: 360px;
+  min-height: 360px;
+  background: radial-gradient(circle, var(--aurora-2) 0%, rgba(0, 0, 0, 0) 70%);
+  animation: waveMotion2 19s ease-in-out infinite alternate;
+}
+
+.wave-3 {
+  bottom: 5%;
+  left: -15%;
+  width: 85vw;
+  height: 85vw;
+  min-width: 320px;
+  min-height: 320px;
+  background: radial-gradient(circle, var(--aurora-3) 0%, rgba(0, 0, 0, 0) 70%);
+  animation: waveMotion3 22s ease-in-out infinite alternate;
+}
+
+.wave-4 {
+  top: 30%;
+  left: 20%;
+  width: 75vw;
+  height: 75vw;
+  min-width: 300px;
+  min-height: 300px;
+  background: radial-gradient(circle, var(--aurora-4) 0%, rgba(0, 0, 0, 0) 70%);
+  animation: waveMotion4 14s ease-in-out infinite alternate;
 }
 
 /* --- Top Section: Timer Elements --- */
@@ -52,6 +136,7 @@ body {
   left: 0;
   right: 0;
   bottom: calc(210px + env(safe-area-inset-bottom, 20px));
+  z-index: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -202,24 +287,46 @@ button {
 }
 
 #reset-btn {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.12);
   color: white;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
 }
 
 .hidden {
   display: none;
 }
 
-/* State Backgrounds */
+/* State Variations */
+.screen-ready {
+  --aurora-1: rgba(255, 59, 48, 0.25);
+  --aurora-2: rgba(90, 200, 250, 0.22);
+  --aurora-3: rgba(175, 82, 222, 0.2);
+  --aurora-4: rgba(255, 149, 0, 0.16);
+}
+
 .screen-exercise {
-  background: radial-gradient(circle at 50% 35%, rgba(255, 59, 48, 0.22) 0%, rgba(0, 0, 0, 0) 75%);
-  box-shadow: inset 0 0 100px rgba(255, 59, 48, 0.25);
+  --aurora-1: rgba(255, 59, 48, 0.55);
+  --aurora-2: rgba(255, 45, 85, 0.45);
+  --aurora-3: rgba(255, 149, 0, 0.48);
+  --aurora-4: rgba(175, 82, 222, 0.35);
+  box-shadow: inset 0 0 100px rgba(255, 59, 48, 0.2);
 }
 
 .screen-rest {
-  background: radial-gradient(circle at 50% 35%, rgba(0, 122, 255, 0.22) 0%, rgba(0, 0, 0, 0) 75%);
-  box-shadow: inset 0 0 100px rgba(0, 122, 255, 0.25);
+  --aurora-1: rgba(0, 122, 255, 0.55);
+  --aurora-2: rgba(10, 132, 255, 0.45);
+  --aurora-3: rgba(50, 215, 75, 0.38);
+  --aurora-4: rgba(94, 92, 230, 0.4);
+  box-shadow: inset 0 0 100px rgba(0, 122, 255, 0.2);
+}
+
+.screen-complete {
+  --aurora-1: rgba(255, 214, 10, 0.5);
+  --aurora-2: rgba(255, 59, 48, 0.4);
+  --aurora-3: rgba(175, 82, 222, 0.45);
+  --aurora-4: rgba(48, 209, 88, 0.4);
 }
 
 .screen-rest #progress-bar,
@@ -246,5 +353,72 @@ button {
 
   100% {
     opacity: 1;
+  }
+}
+
+/* --- Aurora Wavy Keyframes --- */
+@keyframes waveMotion1 {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+    border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%;
+  }
+  50% {
+    transform: translate3d(40px, 60px, 0) rotate(110deg) scale(1.15);
+    border-radius: 58% 42% 38% 62% / 60% 50% 50% 40%;
+  }
+  100% {
+    transform: translate3d(-30px, 100px, 0) rotate(220deg) scale(0.95);
+    border-radius: 35% 65% 55% 45% / 40% 60% 40% 60%;
+  }
+}
+
+@keyframes waveMotion2 {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+    border-radius: 60% 40% 45% 55% / 50% 60% 40% 50%;
+  }
+  50% {
+    transform: translate3d(-60px, -40px, 0) rotate(-130deg) scale(1.2);
+    border-radius: 40% 60% 65% 35% / 40% 45% 55% 60%;
+  }
+  100% {
+    transform: translate3d(-30px, 70px, 0) rotate(-260deg) scale(1.05);
+    border-radius: 55% 45% 40% 60% / 60% 40% 60% 40%;
+  }
+}
+
+@keyframes waveMotion3 {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1.1);
+    border-radius: 50% 50% 35% 65% / 55% 45% 55% 45%;
+  }
+  50% {
+    transform: translate3d(50px, -50px, 0) rotate(140deg) scale(0.9);
+    border-radius: 65% 35% 60% 40% / 40% 60% 40% 60%;
+  }
+  100% {
+    transform: translate3d(20px, -80px, 0) rotate(290deg) scale(1.15);
+    border-radius: 40% 60% 45% 55% / 55% 40% 60% 45%;
+  }
+}
+
+@keyframes waveMotion4 {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(0.95);
+    border-radius: 45% 55% 60% 40% / 45% 55% 45% 55%;
+  }
+  50% {
+    transform: translate3d(-40px, 50px, 0) rotate(-100deg) scale(1.1);
+    border-radius: 60% 40% 35% 65% / 55% 45% 60% 40%;
+  }
+  100% {
+    transform: translate3d(30px, -40px, 0) rotate(-200deg) scale(1);
+    border-radius: 40% 60% 55% 45% / 40% 60% 40% 60%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aurora-wave {
+    animation: none;
   }
 }
