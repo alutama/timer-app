@@ -1,9 +1,16 @@
+const urlParams = new URLSearchParams(window.location.search);
+const isTestMode = urlParams.get('test') === '1' || urlParams.get('test') === 'true';
+
 const CONFIG = {
-  exerciseTime: 40,
-  restTime: 20,
+  exerciseTime: isTestMode ? 4 : 40,
+  restTime: isTestMode ? 2 : 20,
   rounds: 4,
-  beepStart: 3
+  beepStart: isTestMode ? 1 : 3
 };
+
+if (isTestMode) {
+  console.log('⚡ Test mode active: 4s exercise / 2s rest');
+}
 
 let currentState = 'READY'; // READY, EXERCISE, REST, COMPLETE
 let currentRound = 1;
