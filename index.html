@@ -17,34 +17,29 @@
 
 <body>
   <div id="app" class="screen-ready">
-    <header>
-      <div id="round-indicator">ROUND 1/4</div>
+    <div class="timer-section">
       <div id="status-text">READY</div>
-    </header>
-
-    <main>
       <div id="timer-display">40</div>
       <div id="label">EXERCISE</div>
-
       <div class="progress-container">
         <div id="progress-bar"></div>
       </div>
+    </div>
 
+    <div class="bottom-section">
       <div id="dots">
         <span class="dot active"></span>
         <span class="dot"></span>
         <span class="dot"></span>
         <span class="dot"></span>
       </div>
-    </main>
-
-    <footer>
+      <div id="round-indicator">ROUND 1/4</div>
       <div class="controls">
         <button id="start-btn">START WORKOUT</button>
         <button id="pause-btn" class="hidden">PAUSE</button>
         <button id="reset-btn" class="hidden">RESET</button>
       </div>
-    </footer>
+    </div>
   </div>
   <script src="app.js"></script>
 </body>
